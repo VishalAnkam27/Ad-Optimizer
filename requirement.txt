@@ -1,0 +1,11 @@
+Flask
+Werkzeug
+Jinja2
+requests
+gunicorn
+python-dotenv
+psycopg2-binary
+PyJWT
+openai
+firebase-admin
+streamlit
