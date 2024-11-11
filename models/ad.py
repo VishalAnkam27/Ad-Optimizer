@@ -2,11 +2,12 @@ from utils.firestore import db
 
 # models/ad.py
 class Ad:
-    def __init__(self, ad_id, company_id, ad_text, region):
+    def __init__(self, ad_id, company_id, ad_text, region, property_id = None):
         self.ad_id = ad_id
         self.company_id = company_id
         self.ad_text = ad_text
         self.region = region
+        self.property_id = property_id
 
     @staticmethod
     def get_ads_by_company(company_id):
