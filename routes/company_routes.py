@@ -15,11 +15,12 @@ def get_company(company_id):
     company = CompanyService.get_company(company_id)
     return jsonify(company)
 
-
-
-#Create a API to store the property details of a company in the database
+# Create an API to store the property details of a company in the database
 @company_bp.route('/company/<company_id>/property', methods=['POST'])
 def create_property(company_id):
-    data = request.json
+    data = request.json  # Retrieve data directly from the request
+    if not data:
+        return jsonify({"error": "Property data is required"}), 400
+
     response = CompanyService.create_property(company_id, data)
     return jsonify({"message": "Property created successfully", "data": response}), 201
