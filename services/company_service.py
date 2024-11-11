@@ -9,3 +9,7 @@ class CompanyService:
     @staticmethod
     def create_company(data):
         return Company.create_company(data)
+    
+    @staticmethod
+    def create_property(company_id):
+        return Company.create_property(company_id)
