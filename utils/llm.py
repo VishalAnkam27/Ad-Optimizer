@@ -3,12 +3,13 @@
 import openai
 from utils.firestore import db
 from datetime import datetime 
-import os   
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
+
+
 class LLM:
     @staticmethod
-    def optimize_ad(ad_text, company, ads, analytics, ad_details):
+    def optimize_ad(ad_text, company, ads, analytics, ad_details, property_data=None):
         # Construct a prompt for ad optimization
         # prompt = f"Optimize the following ad:\n\nAd: {ad_text}\n\nCompany: {company}\n\nPrevious Ads: {ads}\n\nAnalytics: {analytics}"
         # The ad is targeting the following region:
@@ -74,7 +75,8 @@ class LLM:
         }
 
         # Store the data in Firestore
-        doc_ref = db.collection('ad_optimizations').document()
+        company_id = property_data['company_id']
+        doc_ref = db.collection('companies').document(company_id) # Storing the property data as well
         doc_ref.set(ad_data)
 
         return optimized_ad
