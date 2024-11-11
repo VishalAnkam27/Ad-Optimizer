@@ -16,6 +16,17 @@ class Company:
         doc_ref = db.collection("companies").document(company_id)
         return doc_ref.get().to_dict()
 
+    
+    def get_property(company_id, property_id):
+        if not company_id:
+            raise ValueError("Company ID must be provided")
+        
+            # Reference to the specific property document
+        doc_ref = db.collection('companies').document(company_id).collection('properties').document(property_id)
+        property_data = doc_ref.get().to_dict()
+        return property_data        
+    
+    
     @staticmethod
     def create_company(data):
         if 'company_id' in data and data['company_id']:
@@ -28,3 +39,25 @@ class Company:
         
         doc_ref.set(data)
         return data  # Returning data with the generated company_id for reference
+    
+    
+    @staticmethod
+    def create_property(company_id, data=None, property_id=None):
+        if not company_id:
+            raise ValueError("Company ID must be provided")
+    
+        data['company_id'] = company_id
+        
+        if property_id:
+            doc_ref = db.collection('companies').document(company_id).collection('properties').document(property_id)
+        else:
+            doc_ref = db.collection('companies').document(company_id).collection('properties').document()
+            data['property_id'] = doc_ref.id  # Set the generated ID in the data dictionary
+        
+        print("Creating Property with ID: ", data['property_id'])
+        
+        # Set data and confirm completion
+        doc_ref.set(data)
+        print("Property created successfully with data: ", data)
+        
+        return data
