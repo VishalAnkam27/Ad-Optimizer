@@ -15,6 +15,10 @@ class Company:
 
         doc_ref = db.collection("companies").document(company_id)
         return doc_ref.get().to_dict()
+    
+    def get_all_companies():
+        doc_ref = db.collection("companies").stream()   
+        return [doc.to_dict() for doc in doc_ref]
 
     @staticmethod
     def create_company(data):

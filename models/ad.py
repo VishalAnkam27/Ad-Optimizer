@@ -19,3 +19,4 @@ class Ad:
         data['ad_id'] = ad_id
         db.collection('ads').document(ad_id).set(data)
         return data 
+    

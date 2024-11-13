@@ -15,6 +15,10 @@ def get_company(company_id):
     company = CompanyService.get_company(company_id)
     return jsonify(company)
 
+@company_bp.route('/get-all-companies', methods=['GET'])
+def get_all_companies():
+    companies = CompanyService.get_all_companies()
+    return jsonify(companies)
 
 
 #Create a API to store the property details of a company in the database
@@ -23,3 +27,11 @@ def create_property(company_id):
     data = request.json
     response = CompanyService.create_property(company_id, data)
     return jsonify({"message": "Property created successfully", "data": response}), 201
+
+
+@company_bp.route('/get-properties/<company_id>', methods=['GET'])
+def get_all_properties(company_id):
+    properties = CompanyService.get_all_properties(company_id)
+    return jsonify(properties)
+
+

@@ -13,3 +13,16 @@ def create_ad():
 def get_ads_by_company(company_id):
     ads = AdService.get_ads_by_company(company_id)
     return jsonify(ads)
+
+
+@ad_bp.route('/get-optimized-ads/<company_id>', methods=['GET'])
+def get_optimized_ads_by_company(company_id):
+    ads = AdService.get_optimized_ads_by_company(company_id)
+    return jsonify(ads)
+
+@ad_bp.route('/update-selected-ad/<optimization_id>', methods=['PUT'])
+def update_selected_ad(optimization_id):
+    data = request.json
+    selected_ad = data.get('selected_ad',"")
+    response = AdService.update_selected_ad(optimization_id, selected_ad)
+    return jsonify({"message": "Selected ad updated successfully", "data": response}), 200

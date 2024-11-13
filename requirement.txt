@@ -9,3 +9,4 @@ PyJWT
 openai
 firebase-admin
 streamlit
+flask-cors

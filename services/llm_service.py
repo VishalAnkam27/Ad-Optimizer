@@ -21,3 +21,12 @@ class LLMService:
     @staticmethod
     def suggest_optimal_times(region):
         return LLM.suggest_times(region)
+
+    @staticmethod
+    def get_sample_ad(company_id):
+        print("🚀 ~ company_id:", company_id)
+        company = Company.get_company(company_id)
+        print("🚀 ~ company:", company)
+        sample_ad = LLM.get_sample_ad(company)
+        sample_ad_details = LLM.get_sample_ad_details(company)
+        return sample_ad, sample_ad_details
