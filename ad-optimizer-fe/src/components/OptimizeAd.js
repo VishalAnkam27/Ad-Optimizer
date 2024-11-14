@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Skeleton,
   Divider,
   Grid,
   Radio,
@@ -19,6 +20,7 @@ import { useDropzone } from "react-dropzone"; // For image upload
 import axios from "axios";
 import { useCompany } from "../context/CompanyContext";
 import { useNavigate, useLocation } from "react-router-dom"; // For navigation state
+import { motion } from "framer-motion"; // For animations
 
 const OptimizeAd = () => {
   const { companyId, propertyId } = useCompany();
@@ -91,24 +93,28 @@ const OptimizeAd = () => {
     setError(null);
 
     try {
-      const response = await axios.post("/optimize-ad", {
-        company_id: companyId,
-        property_id: propertyId,
-        ad_text: adText,
-        ad_details: adDetails,
+      // Create FormData for handling both image and text
+      const formData = new FormData();
+      formData.append("company_id", companyId);
+      if (propertyId) {
+        formData.append("property_id", propertyId);
+      }
+      formData.append("ad_details", JSON.stringify(adDetails));
+
+      // Attach image if inputType is 'image', otherwise attach the ad text
+      if (inputType === "image" && image) {
+        formData.append("ad_image", image);
+      } else {
+        formData.append("ad_text", adText);
+      }
+      console.log("🚀 ~ handleOptimizeAd ~ formData:", formData);
+
+      const response = await axios.post("/optimize-ad", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-      console.log("🚀 ~ handleOptimizeAd ~ response:", response);
-      console.log("🚀 ~ handleOptimizeAd ~ response.data:", response.data);
       setOptimizationId(response?.data?.optimized_ads?.optimization_id);
-      console.log("🚀 ~ updateSelectedAd ~ optimizationId:", optimizationId);
-      console.log(
-        "🚀 ~ handleOptimizeAd ~ response?.data?.optimized_ads?.optimization_id:",
-        response?.data?.optimized_ads?.optimization_id
-      );
-      console.log(
-        "🚀 ~ handleOptimizeAd ~ response?.data?.optimized_ads?.optimized_ads:",
-        response?.data?.optimized_ads?.optimized_ads
-      );
       setOptimizedAds(response?.data?.optimized_ads?.optimized_ads || []);
       setSelectedAdIndex(null); // Reset selected ad index
     } catch (err) {
@@ -157,7 +163,7 @@ const OptimizeAd = () => {
       </Typography>
 
       {loadingSample ? (
-        <CircularProgress />
+        <Skeleton variant="rectangular" width={"100%"} height={11} />
       ) : sampleAd ? (
         <Card
           variant="outlined"
@@ -312,15 +318,16 @@ const OptimizeAd = () => {
           </Button>
         </Box>
       )}
-
-      <Button
-        variant="outlined"
-        color="secondary"
-        onClick={() => navigate("/")}
-        sx={{ mt: 2, ml: 2 }}
-      >
-        Go to Previous Ads
-      </Button>
+      <motion.div whileHover={{ scale: 1.05 }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => navigate("/")}
+          sx={{ mt: 2, ml: 2 }}
+        >
+          Go to Previous Ads
+        </Button>
+      </motion.div>
     </Box>
   );
 };
