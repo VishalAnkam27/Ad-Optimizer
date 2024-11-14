@@ -6,7 +6,9 @@ gunicorn
 python-dotenv
 psycopg2-binary
 PyJWT
-openai
+openai==0.27.0
 firebase-admin
 streamlit
-flask-cors
+pytesseract
+pillow
+flask
